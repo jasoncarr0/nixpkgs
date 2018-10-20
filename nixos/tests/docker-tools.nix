@@ -32,6 +32,10 @@ import ./make-test.nix ({ pkgs, ... }: {
       $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.nix.imageName} nix-store -qR ${pkgs.nix}");
       $docker->succeed("docker rmi ${pkgs.dockerTools.examples.nix.imageName}");
 
+      # Ensure shell is not present on minimal-image but is present otherwise
+      $docker->fail("docker run --rm ${pkgs.dockerTools.examples.minimal-image.imageName} ${stdenv.shell}");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered.imageName} ${stdenv.shell}");
+
       # To test the pullImage tool
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nixFromDockerHub}'");
       $docker->succeed("docker run --rm nixos/nix:1.11 nix-store --version");

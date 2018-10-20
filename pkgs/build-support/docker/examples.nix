@@ -157,4 +157,13 @@ rec {
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
+
+  # 11. Create an image without a shell
+  # Will have just hello and glibc
+  minimal-image = pkgs.dockerTools.buildImage {
+    name = "minimal-image";
+    loginShell = null;
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
+
 }

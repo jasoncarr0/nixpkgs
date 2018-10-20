@@ -118,7 +118,7 @@ rec {
     export PATH=${shadow}/bin:$PATH
     mkdir -p /etc/pam.d
     if [[ ! -f /etc/passwd ]]; then
-      echo "root:x:0:0::/root:${stdenv.shell}" > /etc/passwd
+      echo "root:x:0:0::/root:${loginShell}" > /etc/passwd
       echo "root:!x:::::::" > /etc/shadow
     fi
     if [[ ! -f /etc/group ]]; then
@@ -611,6 +611,9 @@ rec {
     # directories (see `rsync -K`).  Otherwise, transform those symlinks
     # into directories.
     keepContentsDirlinks ? false,
+    # Default login shell for root in /etc/passwd for shadowSetup;
+    # No shell will be used if null
+    loginShell ? stdenv.shell,
     # Docker config; e.g. what command to run on the container.
     config ? null,
     # Optional bash script to run on the files prior to fixturizing the layer.
